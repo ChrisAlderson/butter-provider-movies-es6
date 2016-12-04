@@ -1,7 +1,6 @@
 'use strict';
 
 const Generic = require('butter-provider');
-const querystring = require('querystring');
 const request = require('request');
 const sanitize = require('butter-sanitize');
 
@@ -52,7 +51,7 @@ class MovieApi extends Generic {
     const match = url.match(/^cloudflare\+(.*):\/\/(.*)/);
     if (match) {
       options = Object.assign(options, {
-        uri: match[1] + '://cloudflare.com/',
+        uri: `${match[1]}://cloudflare.com/`,
         headers: {
           'Host': match[2],
           'User-Agent': 'Mozilla/5.0 (Linux) AppleWebkit/534.30 (KHTML, like Gecko) PT/3.8.0'
@@ -62,17 +61,18 @@ class MovieApi extends Generic {
     return options;
   }
 
-  _get(index, url) {
+  _get(index, url, qs) {
     const req = this._processCloudFlareHack({
       url,
-      json: true
+      json: true,
+      qs
     }, this.apiURL[index]);
-    console.info('Request to MovieApi', req.url);
+    console.info(`Request to MovieApi: '${req.url}'`);
 
     return new Promise((resolve, reject) => {
       request(req, (err, res, data) => {
         if (err || res.statusCode >= 400) {
-          console.warn('MovieAPI endpoint \'%s\' failed.', this.apiURL[index]);
+          console.warn(`MovieApi endpoint 'this.apiURL[index]' failed.`);
           if (index + 1 >= this.apiURL.length) {
             return reject(err || 'Status Code is above 400');
           } else {
@@ -80,7 +80,7 @@ class MovieApi extends Generic {
           }
         } else if (!data || data.error) {
           err = data ? data.status_message : 'No data returned';
-          console.error('API error:', err);
+          console.error(`MovieApi error: ${err}`);
           return reject(err);
         } else {
           return resolve(this._formatForPopcorn(data));
@@ -105,20 +105,18 @@ class MovieApi extends Generic {
     if (filters.sorter && filters.sorter !== 'popularity') params.sort = filters.sorter;
 
     const index = 0;
-    const url = this.apiURL[index] + 'movies/' + filters.page + '?' + querystring.stringify(params).replace(/%25%20/g, '%20');
-    return this._get(index, url);
+    const url = `${this.apiURL[index]}movies/${filters.page}`;
+    return this._get(index, url, params);
   }
 
   random() {
     const index = 0;
-    const url = this.apiURL[index] + '/random/movie';
+    const url = `${this.apiURL[index]}/random/movie`;
     return this._get(index, url);
   }
 
   detail(torrent_id, old_data, debug) {
-    return new Promise((resolve, reject) => {
-      resolve(old_data);
-    });
+    return new Promise((resolve, reject) => resolve(old_data));
   }
 
 }
