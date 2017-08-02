@@ -5,19 +5,31 @@
   "main": "index.js",
   "butter": {
     "timeout": 20000,
-    "testArgs": "MovieApi?apiURL=[\"http://localhost:5000/\",\"https://movies-v2.api-fetch.website/\",\"cloudflare+https://movies-v2.api-fetch.website/\"]&lang=en"
+    "testArgs": "MovieApi?apiUrl=[\"http://localhost:5000/\"]&lang=en"
   },
   "scripts": {
-    "test": "tape ./node_modules/butter-provider/tests/*"
+    "coveralls": "cat ./coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls",
+    "lint": "./node_modules/.bin/eslint index.js",
+    "test": "nyc --reporter=lcov --reporter=text ./node_modules/.bin/tape ./node_modules/butter-provider/tests/* | tap-nyc"
   },
   "license": "MIT",
   "dependencies": {
-    "butter-provider": "git+https://github.com/butterproviders/butter-provider",
+    "butter-provider": "git+https://github.com/chrisalderson/butter-provider.git",
     "butter-sanitize": "^0.1.1",
-    "request": "^2.79.0"
+    "got": "^7.1.0"
   },
   "devDependencies": {
+    "coveralls": "^2.13.1",
     "debug": "^2.6.0",
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nyc": "^11.1.0",
+    "standard": "^10.0.2",
+    "tap-nyc": "^1.0.2",
     "tape": "^4.6.3"
   },
   "repository": {

@@ -1,5 +1,10 @@
 # butter-provider-movie-es6
 
+[![Build Status](https://travis-ci.org/ChrisAlderson/butter-provider-movies-es6.svg?branch=master)](https://travis-ci.org/ChrisAlderson/butter-provider-movies-es6)
+[![Coverage Status](https://coveralls.io/repos/github/ChrisAlderson/butter-provider-movies-es6/badge.svg?branch=master)](https://coveralls.io/github/ChrisAlderson/butter-provider-movies-es6?branch=master)
+[![Dependency Status](https://david-dm.org/ChrisAlderson/butter-provider-movies-es6.svg)](https://david-dm.org/ChrisAlderson/butter-provider-movies-es6)
+[![devDependency Status](https://david-dm.org/ChrisAlderson/butter-provider-movies-es6/dev-status.svg)](https://david-dm.org/ChrisAlderson/butter-provider-movies-es6#info=devDependencies)
+
 A Butter provider for movie, completable with the [popcorn-api](https://github.com/popcorn-official/popcorn-api).
 
 # License
