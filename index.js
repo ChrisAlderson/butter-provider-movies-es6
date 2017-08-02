@@ -131,7 +131,7 @@ module.exports = class MovieApi extends Provider {
     }
   }
 
-  _get(index = 0, url, query = {}) {
+  _get(index, url, query) {
     const req = this._processCloudFlareHack({
       query,
       json: true
@@ -152,13 +152,13 @@ module.exports = class MovieApi extends Provider {
     })
   }
 
-  extractId(items) {
+  extractIds(items) {
     return items.results.map(
-      item => item[MovieApi.config.uniqueId]
+      item => item[this.config.uniqueId]
     )
   }
 
-  fetch(filters = {}, index = 0) {
+  fetch(filters = {}) {
     const params = {}
 
     if (filters.keywords) {
@@ -177,28 +177,29 @@ module.exports = class MovieApi extends Provider {
     const page = filters.page ? filters.page : 1
 
     const url = `${this.apiUrl}movies/${page}`
-    return this._get(index, url, params)
+    return this._get(0, url, params)
       .then(data => this._formatFetch(data))
   }
 
-  detail(torrentId, oldData, debug, index = 0) {
+  detail(torrentId, oldData) {
     if (oldData) {
       return Promise.resolve(oldData)
     }
 
     const url = `${this.apiUrl}movie/${torrentId}`
-    return this._get(index, url)
+    return this._get(0, url)
       .then(data => this._formatDetail(data))
   }
 
-  // random (index = 0) {
-  //   const url = `${this.apiUrl}random/movie`
-  //   return this._get(index, url)
-  //     .then(data => this._formatDetail(data))
-  // }
+  random() {
+    const url = `${this.apiUrl}random/movie`
+    return this._get(0, url)
+      .then(data => this._formatDetail(data))
+  }
 
   resolveStream(src, filters, data) {
     const lang = filters.lang ? filters.lang : this.lang
+
     const qualities = Object.keys(data.torrents)
     const quality = filters.quality !== 'none'
       ? filters.quality
